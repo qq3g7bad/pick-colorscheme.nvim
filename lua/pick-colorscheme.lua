@@ -1,6 +1,6 @@
-local RandomColorscheme = {}
+local PickColorscheme = {}
 
-RandomColorscheme.get_colorschemes = function()
+PickColorscheme.get_colorschemes = function()
     local colorschemes = {}
     for _, path in ipairs(vim.api.nvim_list_runtime_paths()) do
         local colorscheme_path = path .. "/colors"
@@ -13,18 +13,18 @@ RandomColorscheme.get_colorschemes = function()
     return colorschemes
 end
 
-RandomColorscheme.random_colorscheme = function(colorschemes)
+PickColorscheme.pick_colorscheme = function(colorschemes)
     if (type(colorschemes) ~= "table") or (colorschemes[1] == nil) then
-        colorschemes = RandomColorscheme.get_colorschemes()
+        colorschemes = PickColorscheme.get_colorschemes()
     end
     local cs = colorschemes[(os.time() % #colorschemes) + 1]
     vim.api.nvim_command('colorscheme ' .. cs)
 end
 
-RandomColorscheme.setup = function()
-    vim.api.nvim_create_user_command("RandomColorscheme",
-        RandomColorscheme.random_colorscheme,
+PickColorscheme.setup = function()
+    vim.api.nvim_create_user_command("PickColorscheme",
+        PickColorscheme.pick_colorscheme,
         {nargs = 0})
 end
 
-return RandomColorscheme
+return PickColorscheme
