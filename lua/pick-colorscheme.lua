@@ -13,6 +13,18 @@ PickColorscheme.get_colorschemes = function()
     return colorschemes
 end
 
+PickColorscheme.pick_colorscheme_from_command = function(colorscheme_args)
+    if (colorscheme_args ~= "") then
+        local color_table = {}
+        for arg in (colorscheme_args):gmatch("%S+") do
+            table.insert(color_table, arg)
+        end
+        PickColorscheme.pick_colorscheme(color_table)
+    else
+        PickColorscheme.pick_colorscheme()
+    end
+end
+
 PickColorscheme.pick_colorscheme = function(colorschemes)
     if (type(colorschemes) ~= "table") or (colorschemes[1] == nil) then
         colorschemes = PickColorscheme.get_colorschemes()
@@ -23,8 +35,10 @@ end
 
 PickColorscheme.setup = function()
     vim.api.nvim_create_user_command("PickColorscheme",
-        PickColorscheme.pick_colorscheme,
-        {nargs = 0})
+        function(args)
+            PickColorscheme.pick_colorscheme_from_command(args.args)
+        end,
+        {nargs = "?"})
 end
 
 return PickColorscheme
