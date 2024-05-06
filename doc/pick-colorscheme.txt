@@ -1,0 +1,31 @@
+*pick-colorscheme.txt* Select a colorscheme as if drawing lots.
+*PickColorscheme*
+
+MIT License
+
+==============================================================================
+USAGE                                                   *pick-colorscheme-usage*
+
+    Put something like this in your configuration lua file:
+>
+        require("pick-colorscheme").setup()
+<
+    If you use .vimrc, write like this
+>
+        lua require("pick-colorscheme").setup()
+<
+    You can apply pick-colorscheme. Run this command in vim.
+>
+        :PickColorscheme
+<
+------------------------------------------------------------------------------
+
+Select colorschemes~
+
+    If you want to limit colorschemes to pick, run this command in vim. In
+    this case, the colorscheme will be selected from either "blue" or "default".
+>
+        :lua require("pick-colorscheme").pick_colorscheme({"blue", "default"})
+<
+==============================================================================
+vim:tw=78:ft=help:norl:et:ts=2:sw=2:fen:fdl=0:
