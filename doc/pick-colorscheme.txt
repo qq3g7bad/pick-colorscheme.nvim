@@ -12,10 +12,10 @@ Setup~
 >
         require("pick-colorscheme").setup()
 <
+    
     If you use .vimrc, write like this
 >
         lua require("pick-colorscheme").setup()
-
 <
 ------------------------------------------------------------------------------
 
@@ -25,6 +25,7 @@ Change colorscheme~
 >
         :PickColorscheme
 <
+
     If you want to limit colorschemes to pick, run this command in vim. In
     this case, the colorscheme will be selected from either "blue" or "default".
 >
