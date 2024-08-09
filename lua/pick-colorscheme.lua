@@ -63,6 +63,7 @@ PickColorscheme.pick_colorscheme = function(colorschemes)
     else
         vim.api.nvim_err_writeln('ERROR: "' .. cs .. '" does not exist.')
     end
+    vim.api.nvim_command('color')
 end
 
 ---
