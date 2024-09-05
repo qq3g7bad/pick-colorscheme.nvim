@@ -14,7 +14,12 @@ PickColorscheme.get_colorschemes = function()
     local colorschemes = {}
     for _, path in ipairs(vim.api.nvim_list_runtime_paths()) do
         local colorscheme_path = path .. "/colors"
-        local colorscheme_files = vim.fn.glob(colorscheme_path .. "/*.vim", false, true)
+
+        local colorscheme_files_vim = vim.fn.glob(colorscheme_path .. "/*.vim", false, true)
+        local colorscheme_files_lua = vim.fn.glob(colorscheme_path .. "/*.lua", false, true)
+
+        local colorscheme_files = vim.list_extend(colorscheme_files_vim, colorscheme_files_lua)
+
         for _, file in ipairs(colorscheme_files) do
             local colorscheme = vim.fn.fnamemodify(file, ":t:r")
             table.insert(colorschemes, colorscheme)
