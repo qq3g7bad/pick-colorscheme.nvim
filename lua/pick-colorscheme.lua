@@ -30,12 +30,12 @@ end
 
 ---
 --- @brief Pick colorscheme from vim command line
---- @args  Colorschemes seperated by a whitespace
+--- @args  Colorschemes separated by a whitespace
 ---
 PickColorscheme.pick_colorscheme_from_command = function(colorscheme_args)
-    if (colorscheme_args ~= "") then
+    if colorscheme_args ~= nil and colorscheme_args ~= "" then
         local color_table = {}
-        for arg in (colorscheme_args):gmatch("%S+") do
+        for arg in colorscheme_args:gmatch("%S+") do
             table.insert(color_table, arg)
         end
         PickColorscheme.pick_colorscheme(color_table)
@@ -49,21 +49,33 @@ end
 --- @args   colorschemes [table](option) : A table includin colorscheme candidates
 ---
 PickColorscheme.pick_colorscheme = function(colorschemes)
+    local all_colorschemes = PickColorscheme.get_colorschemes()
+
     if (type(colorschemes) ~= "table") or (colorschemes[1] == nil) then
-        colorschemes = PickColorscheme.get_colorschemes()
+        colorschemes = all_colorschemes
     end
-    local cs = colorschemes[(os.time() % #colorschemes) + 1]
 
+    -- Empty colorscheme check
+    if #colorschemes == 0 then
+        vim.api.nvim_err_writeln('ERROR: No colorschemes found.')
+        return
+    end
 
+    -- Seed random number generator with microsecond precision
+    math.randomseed(os.time() * 1000 + vim.loop.hrtime() % 1000)
+    local random_index = math.random(1, #colorschemes)
+    local cs = colorschemes[random_index]
+
+    -- Validate the selected colorscheme exists
     local is_cs_exist = false
-    for _, value in ipairs(PickColorscheme.get_colorschemes()) do
+    for _, value in ipairs(all_colorschemes) do
         if value == cs then
             is_cs_exist = true
             break
         end
     end
 
-    if (is_cs_exist == true) then
+    if is_cs_exist then
         vim.api.nvim_command('colorscheme ' .. cs)
     else
         vim.api.nvim_err_writeln('ERROR: "' .. cs .. '" does not exist.')
@@ -81,7 +93,7 @@ PickColorscheme.setup = function()
         end,
         {
             nargs = "?",
-            complete="color"
+            complete = "color"
         }
     )
 end
